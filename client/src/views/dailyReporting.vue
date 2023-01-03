@@ -60,13 +60,13 @@
                     <table class="table bg-white">
                         <thead>
                             <tr>
-                                <th scope="col">Regular</th>
+                                <th scope="col">Name</th>
                                 <th scope="col">Wage</th>
                                 <th scope="col">Regular Hours</th>
                                 <th scope="col">Overtime</th>
                                 <th scope="col">Stat</th>
-                                <th scope="col">Total</th>
-                                <th scope="col">Wage</th>
+                                <th scope="col">Total Hours</th>
+                                <th scope="col">Total Wage</th>
                                 <th scope="col">Advance</th>
                                 <th scope="col">Notes</th>
                             </tr>
@@ -176,7 +176,7 @@
                                 <td><input type="date" class="form-control" id="inputhours" min=0 v-model="purchase.date"></td>
                                 <td><input type="text" class="form-control" id="inputWage" v-model="purchase.store"></td>
                                 <td>
-                                    <font-awesome-icon icon="user-edit" @click="openNoteEditor('purchases',index)" />{{purchase.notes}}</td>
+                                    <font-awesome-icon icon="user-edit" @click="openNoteEditor('purchases',index)" /></td>
                                 <td>
                                     <font-awesome-icon icon="trash" @click="deletePurchase(index)" />
                                 </td>
@@ -211,6 +211,17 @@
                 </div>
             </div>
         </div>
+        <div id="noteModal" class="modal" v-if="isErrorVisible == true">
+            <div class="modal-content">
+                <span class="close float-right" @click="isErrorVisible = false">&times;</span>
+                <div class="form-group green-border-focus">
+                    <label for="exampleFormControlTextarea5">Error:</label>
+                    <h4>Report already exists for date. Please go back and edit the existing report.</h4>
+                     <button type="button" class="btn-lg btn-dark" @click="viewExistingReports()">View Existing Reports</button>
+                </div>
+            </div>
+        </div>
+         <button type="button" class="btn-lg btn-dark w-100" @click="saveReport()">Save</button>
     </div>
 </template>
 <script>
@@ -224,7 +235,6 @@ export default {
     data() {
         return {
             staff_list: [],
-            staff_entries: {},
             roles: [],
             positions: [],
             purchases: [],
@@ -238,6 +248,7 @@ export default {
                 food: null,
                 liqour: null
             },
+            isErrorVisible:false,
             areas: [],
             restaurants: [],
             modalPage: 0,
@@ -259,7 +270,7 @@ export default {
             })
         },
         dateClean(){
-            return new Date(this.date).toDateString()
+            return this.date
         }
     },
     methods: {
@@ -283,6 +294,26 @@ export default {
                     return list.reduce((accum, item) => accum + Number(item.dailyAdvance), 0)
                     break;
             }
+        },
+        saveReport(){
+            UserService.addDailyReport({
+                dailyData:{
+                    staff_list:this.staff_list,
+                    purchases:this.purchases,
+                    sales:this.sales
+                },
+                reportDate:this.date
+            }).then(
+            response=>{
+                this.$router.push(`/reporting`)
+            })
+            .catch(err=>{
+                this.isErrorVisible = true
+
+        })
+        },
+        viewExistingReports(){
+            this.$router.push(`/reporting`)
         },
         openNoteEditor(data, note) {
             this.modalEditor.noteRef = note
@@ -421,9 +452,6 @@ export default {
             }
 
         },
-        resolveEditor(id) {
-            this.$router.push(`/staff/edit/${id}`);
-        },
         getUserHours(staff) {
             return Number(staff.dailyHours) + Number(staff.dailyOT) + Number(staff.dailyStat)
         },
@@ -456,9 +484,6 @@ export default {
                 this.staff_list = response.data.map(item => {
                     const staff = { dailyHours: null, dailyOT: null, dailyStat: null, dailyAdvance: null, ...item };
                     return staff;
-                });
-                this.staff_list.forEach((staff) => {
-                    this.staff_entries[staff.id] = { dailyHours: null, dailyOT: null, dailyStat: null, dailyAdvance: null }
                 });
 
             },

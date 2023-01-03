@@ -10,9 +10,4 @@ module.exports = function(app) {
     next();
   });
 
-  app.get(
-    "/api/get/staff",
-    [authJwt.verifyToken],
-    controller.getStaff
-  );
 };

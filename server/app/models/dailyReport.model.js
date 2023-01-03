@@ -1,8 +1,5 @@
 module.exports = (sequelize, Sequelize) => {  
   const DailyReport = sequelize.define("dailyReport", {
-    name: {
-      type: Sequelize.STRING
-    },
     restaurant_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
@@ -17,18 +14,25 @@ module.exports = (sequelize, Sequelize) => {
     user_id: {
       type: Sequelize.INTEGER,
       references: {
-        model: 'user', 
+        model: 'users', 
         key: 'id'
       }
     },
-    reportDate:{
+    report_date:{
       type: Sequelize.DATEONLY,
       allowNull: false,
     },
     createdAt:{
       type: Sequelize.DATE,
-      defaultValue: DataTypes.NOW,
+      defaultValue: Sequelize.DataTypes.NOW,
+    }
+  },
+    {
+    uniqueKeys: {
+      restaurant_id_report_date_idx: {
+        fields: ['restaurant_id', 'report_date']
+      }
     }
   });
-  return dailyReport;
+  return DailyReport;
 };

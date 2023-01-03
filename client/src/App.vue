@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <sidebar v-if="currentUser" />
+    <sidebar v-if="currentUser" :role="currentUser.roles"/>
     <div class="widthSetter">      
       <router-view />
     </div>
@@ -55,8 +55,18 @@ export default {
 };
 </script>
 <style>
+  @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
+
+html, body {
+  font-family: 'Raleway', sans-serif;
+}
+
+#app {
+  font-family: 'Raleway', sans-serif;
+}
   .widthSetter{
     width: 100%;
+    height:100vh;
     overflow-x:hidden;
     padding-left:160px;
   }

@@ -58,6 +58,23 @@ isOwner = (req, res, next) => {
   });
 };
 
+isManager = (req, res, next) => {
+  User.findByPk(req.userId).then(user => {
+    user.getRoles().then(roles => {
+      for (let i = 0; i < roles.length; i++) {
+        if (roles[i].name === "owner" || roles[i].name === "manager") {
+          next();
+          return;
+        }
+      }
+      res.status(403).send({
+        message: "Requires Owner Role!"
+      });
+      return;
+    });
+  });
+};
+
 isModerator = (req, res, next) => {
   User.findByPk(req.userId).then(user => {
     user.getRoles().then(roles => {
@@ -102,6 +119,7 @@ const authJwt = {
   isAdmin: isAdmin,
   isModerator: isModerator,
   isModeratorOrAdmin: isModeratorOrAdmin,
-  isOwner: isOwner
+  isOwner: isOwner,
+  isManager: isManager
 };
 module.exports = authJwt;

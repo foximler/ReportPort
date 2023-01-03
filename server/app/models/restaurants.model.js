@@ -7,7 +7,11 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING
     },
     franchise_id: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'franchises', 
+        key: 'id'
+      }
     },
     meta_restaurant: {
       type: Sequelize.JSONB

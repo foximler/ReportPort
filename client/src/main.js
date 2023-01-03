@@ -16,10 +16,14 @@ import {
   faSignOutAlt,
   faEdit,
   faPlus,
-  faTrash
+  faTrash,
+  faCashRegister,
+  faShoppingCart,
+  faExclamationTriangle,
+  faCheck
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt, faUserEdit, faEdit, faPlus, faTrash);
+library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt, faUserEdit, faEdit, faPlus, faTrash, faCashRegister, faShoppingCart, faExclamationTriangle,faCheck);
 const app = createApp(App);
 app.config.productionTip = false;
 

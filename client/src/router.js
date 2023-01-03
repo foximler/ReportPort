@@ -34,6 +34,18 @@ export const router = createRouter({
       component: () => import('./views/dailyReporting.vue')
     },
     {
+      path: '/reporting/',
+      name: 'dailyList',
+      // lazy-loaded
+      component: () => import('./views/dailyList.vue')
+    },
+    {
+      path: '/reporting/edit/:id',
+      name: 'editDailyReport',
+      // lazy-loaded
+      component: () => import('./views/editDailyReport.vue')
+    },
+    {
       path: '/profile',
       name: 'profile',
       // lazy-loaded

@@ -3,8 +3,8 @@
   <div class="logo d-flex justify-content-center align-items-center">
        <img src="http://reportport.ca/logowhite.png"  style="width: 120px;">
       </div>
-  <a href="#" @click="$router.push('/')" :class="{active: 'home' == $route.name}">Dashboard</a>
-  <a href="#" @click="$router.push('/reporting/daily')" :class="{active: 'dailyReporting' == $route.name}">Report</a>
+  <a @click="$router.push('/')" :class="{active: 'home' == $route.name}">Dashboard</a>
+  <a @click="$router.push('/reporting')" :class="{active: isReportOrChildren}" v-if="isManager">Report</a>
   <a @click="$router.push('/staff')" href="#" :class="{active: 'staff' == $route.name}">Staff</a>
   <a @click="$router.push('/profile')" href="#" :class="{active: 'profile' == $route.name}">Profile</a>
   <a href="#" @click="logOut" style="bottom:0; position:absolute; margin-bottom:20px;">Logout <font-awesome-icon icon="sign-out-alt" size="xs"/></a>
@@ -14,9 +14,27 @@
 <script>
 export default {
   name: 'Sidebar',
+  props:['role'],
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
+    },
+    isManager(){
+      return this.role.includes('ROLE_MANAGER');
+    },
+    isReportOrChildren(){
+      if ('dailyReporting' == this.$route.name){
+        return true
+      }
+      else if ('dailyList' == this.$route.name){
+        return true
+      }
+      else if ('editDailyReport' == this.$route.name){
+        return true
+      }
+      else{
+        return false
+      }
     }
   },
   methods: {

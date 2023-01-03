@@ -25,11 +25,20 @@ class UserService {
   getRestaurantsList() {
     return axios.get(API_URL + 'restaurants', { headers: authHeader() });
   }
+  getUsersNames() {
+    return axios.get(API_URL + 'usersNames', { headers: authHeader() });
+  }
   getAdminBoard() {
     return axios.get(API_URL + 'admin', { headers: authHeader() });
   }
   getStaffInfo(id) {
     return axios.post(API_URL + 'staffInfo',{id: id}, { headers: authHeader() });
+  }
+  getReportInfo(id) {
+    return axios.post(API_URL + 'reportInfo',{id: id}, { headers: authHeader() });
+  }
+  getDashboardData(id) {
+    return axios.get(API_URL + 'getDashboardData', { headers: authHeader() });
   }
   addStaff(staff) {
     return axios.post(API_URL + 'addStaff', {
@@ -45,6 +54,29 @@ class UserService {
     bank: staff.bank,
     position_id:  staff.position_id,
   },{
+  headers: authHeader()});
+  }
+  updateDailyReport(reportdata) {
+    return axios.post(API_URL + 'updateDaily', {
+    reportDate:reportdata.reportDate,
+    dailyData:reportdata.dailyData,
+    id:reportdata.id
+  },{
+  headers: authHeader()});
+  }
+  addDailyReport(reportdata) {
+    return axios.post(API_URL + 'addDaily', {
+    reportDate:reportdata.reportDate,
+    dailyData:reportdata.dailyData
+  },{
+  headers: authHeader()});
+  }
+  getRecentReports(reportdata) {
+    return axios.get(API_URL + 'getRecentReports',{
+  headers: authHeader()});
+  }
+  getReportByDate(date) {
+    return axios.post(API_URL + 'getReportByDate', {date: date},{
   headers: authHeader()});
   }
   deleteStaff(id) {

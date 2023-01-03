@@ -22,9 +22,9 @@ const Position = db.position
 const Staff = db.staff
 // db.sequelize.sync();
 // force: true will drop the table if it already exists
-db.sequelize.sync({ force: true }).then(() => {
+db.sequelize.sync({ force: false }).then(() => {
   //console.log("Drop and re-sync db.");
-  initial();
+  //initial();
 });
 
 app.use(express.static("public"));
@@ -42,45 +42,52 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
 
-function initial() {
-  Role.create({
+async function initial() {
+  await Franchise.create({
+   name: "T"
+  })
+  await Restaurant.create({
+   name: "T",
+   address: "GP",
+   franchise_id: 1
+  })
+  await Role.create({
     id: 1,
     name: "user"
   });
 
-  Role.create({
+  await Role.create({
     id: 2,
     name: "employee"
   });
 
-  Role.create({
+  await Role.create({
     id: 3,
     name: "manager"
   });
  
-  Role.create({
+  await Role.create({
     id: 4,
     name: "owner"
   });
-
-  User.create({
+  await User.create({
     id:1,
     first_name: "Fox",
     last_name: "Imler",
     email: "",
     password: "",
-  }).then(user => {user.setRoles([4])}
-  )
-
-  
-
-  Franchise.create({
-   name: "The Old Trapper"
+  }).then(user => {
+    user.setRoles([4])
   })
-  Restaurant.create({
-   name: "The Old Trapper #1",
-   address: "GP",
-   franchise_id: 1
+  await User.create({
+    id:2,
+    first_name: "Fox",
+    last_name: "Imler",
+    email: "",
+    password: "",
+    restaurant_id:1
+  }).then(user => {
+    user.setRoles([3])
   })
 
   Area.create({
